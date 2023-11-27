@@ -2,10 +2,9 @@ package com.example.queueProject.controller;
 
 import com.example.queueProject.entity.Queue;
 import com.example.queueProject.repository.QueueRepository;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/queue")
@@ -20,5 +19,10 @@ public class QueueController {
     @PostMapping
     void addQueue(@RequestBody Queue queue) {
         repository.save(queue);
+    }
+
+    @GetMapping
+    List<Queue> getAllQueues() {
+        return repository.findAll();
     }
 }

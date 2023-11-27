@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/person")
 public class PersonController {
@@ -32,5 +34,25 @@ public class PersonController {
         repository.save(personToUpdate);
 
         return ResponseEntity.ok(personToUpdate);
+    }
+
+    @GetMapping("/{id}")
+    Long getPositionInQueue(@PathVariable long id) {
+        Person personForInfo = repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return personForInfo.getPositionInQueue();
+    }
+
+
+    @GetMapping
+    List<Person> getPersons() {
+        return repository.findAll();
+    }
+
+    @DeleteMapping("/{id}")
+    void deletePerson(@PathVariable Long id){
+        if (repository.findById(id).isPresent())
+            repository.deleteById(id);
+        else
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
 }

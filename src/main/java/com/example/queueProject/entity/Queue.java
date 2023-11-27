@@ -17,6 +17,6 @@ public class Queue {
     String queueName;
     Boolean queueStatus;
 
-    @OneToMany(mappedBy = "queue")
+    @OneToMany
     private List<Person> persons = new ArrayList<>();
 }
