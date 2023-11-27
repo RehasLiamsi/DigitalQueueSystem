@@ -16,7 +16,4 @@ public class Queue {
     private Long queueId;
     String queueName;
     Boolean queueStatus;
-
-    @OneToMany
-    private List<Person> persons = new ArrayList<>();
 }

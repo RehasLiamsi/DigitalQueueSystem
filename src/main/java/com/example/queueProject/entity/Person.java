@@ -19,6 +19,6 @@ public class Person {
     LocalDateTime leftAtTime;
 
     @ManyToOne
-    @JoinColumn(name = "personQueueIdFK")
-    private Queue queueId;
+    @JoinColumn(name="personQueueIdFK")
+    private Queue queue;
 }
