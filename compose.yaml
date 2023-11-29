@@ -1,10 +1,10 @@
-services:
-  mysql:
-    image: 'mysql:latest'
-    environment:
-      - 'MYSQL_DATABASE=mydatabase'
-      - 'MYSQL_PASSWORD=secret'
-      - 'MYSQL_ROOT_PASSWORD=verysecret'
-      - 'MYSQL_USER=myuser'
-    ports:
-      - '3306'
+#services:
+#  mysql:
+#    image: 'mysql:latest'
+#    environment:
+#      - 'MYSQL_DATABASE=queutrial'
+#      - 'MYSQL_PASSWORD=passionProjects'
+#      - 'MYSQL_ROOT_PASSWORD=Study.8111991'
+#      - 'MYSQL_USER=passionProjects'
+#    ports:
+#      - '3306'
