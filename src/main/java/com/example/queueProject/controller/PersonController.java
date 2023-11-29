@@ -2,15 +2,16 @@ package com.example.queueProject.controller;
 
 import com.example.queueProject.dto.PersonDto;
 import com.example.queueProject.entity.Person;
-import com.example.queueProject.entity.Queue;
 import com.example.queueProject.repository.PersonRepository;
-import com.example.queueProject.repository.QueueRepository;
-import jakarta.persistence.EntityNotFoundException;
+import com.example.queueProject.services.ConversionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -18,33 +19,50 @@ import java.util.List;
 public class PersonController {
 
     private final PersonRepository personRepository;
-    private final QueueRepository queueRepository;
+    private final ConversionService conversionService;
 
-    public PersonController(PersonRepository personRepository, QueueRepository queueRepository) {
+    public PersonController(PersonRepository personRepository, ConversionService conversionService) {
         this.personRepository = personRepository;
-        this.queueRepository = queueRepository;
+        this.conversionService = conversionService;
     }
 
     @PostMapping
-    public PersonDto addPerson(@RequestBody PersonDto personDto) {
-        Person person = convertToEntity(personDto);
-        person = personRepository.save(person);
-        return personDto;
+    ResponseEntity<PersonDto> addPerson(@RequestBody PersonDto personDto) {
+        personDto.setJoinedAtTime(LocalDateTime.now());
+        Person person = conversionService.convertToPersonEntity(personDto);
+        personRepository.save(person);
+
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(personDto.getPersonId()).toUri();
+        return ResponseEntity.created(location).build();
     }
 
     @PutMapping("/{id}")
-    ResponseEntity<Person> updatePerson(@PathVariable Long id, @RequestBody Person person) {
+    ResponseEntity<Person> updatePositionInQueue(@PathVariable Long id) {
         Person personToUpdate = personRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        personToUpdate.setPositionInQueue(person.getPositionInQueue());
-        personToUpdate.setLeftAtTime(person.getLeftAtTime());
+        Long oldPositionInQueue = getPositionInQueue(id);
+        Long newPositionInQueue = --oldPositionInQueue;
+        personToUpdate.setPositionInQueue(newPositionInQueue);
         personRepository.save(personToUpdate);
 
         return ResponseEntity.ok(personToUpdate);
     }
 
-    @GetMapping("/{id}")
+    @PutMapping("/left/{id}")
+    ResponseEntity<Person> updateLeftAtTIme(@PathVariable Long id) {
+        Person personToUpdate = personRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        personToUpdate.setLeftAtTime(LocalDateTime.now());
+        personRepository.save(personToUpdate);
+
+        return ResponseEntity.ok(personToUpdate);
+    }
+
+
+    @GetMapping("/position/{id}")
     Long getPositionInQueue(@PathVariable long id) {
         Person personForInfo = personRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         return personForInfo.getPositionInQueue();
@@ -56,6 +74,12 @@ public class PersonController {
         return personRepository.findAll();
     }
 
+    @GetMapping("/{id}")
+    PersonDto getPersonById(@PathVariable long id) {
+        Person person = personRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return conversionService.convertToPersonDto(person);
+    }
+
     @DeleteMapping("/{id}")
     void deletePerson(@PathVariable Long id) {
         if (personRepository.findById(id).isPresent())
@@ -65,30 +89,4 @@ public class PersonController {
     }
 
 
-    private PersonDto convertToDTO(Person person) {
-        PersonDto dto = new PersonDto();
-        dto.setPersonId(person.getPersonId());
-        dto.setPositionInQueue(person.getPositionInQueue());
-        dto.setJoinedAtTime(person.getJoinedAtTime());
-        dto.setLeftAtTime(person.getLeftAtTime());
-        dto.setQueueId(person.getQueue() != null ? person.getQueue().getQueueId() : null);
-        return dto;
-    }
-
-    private Person convertToEntity(PersonDto dto) {
-        Person person = new Person();
-        if (dto.getPersonId() != null) {
-            person = personRepository.findById(dto.getPersonId())
-                    .orElseThrow(() -> new EntityNotFoundException("Person not found"));
-        }
-        person.setPositionInQueue(dto.getPositionInQueue());
-        person.setJoinedAtTime(dto.getJoinedAtTime());
-        person.setLeftAtTime(dto.getLeftAtTime());
-        if (dto.getQueueId() != null) {
-            Queue queue = queueRepository.findById(dto.getQueueId())
-                    .orElseThrow(() -> new EntityNotFoundException("Queue not found"));
-            person.setQueue(queue);
-        }
-        return person;
-    }
 }
