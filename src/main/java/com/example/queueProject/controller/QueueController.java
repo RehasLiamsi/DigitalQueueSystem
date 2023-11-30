@@ -6,7 +6,10 @@ import com.example.queueProject.entity.Queue;
 import com.example.queueProject.repository.QueueRepository;
 import com.example.queueProject.services.ConversionService;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,5 +45,16 @@ public class QueueController {
         Queue queue = queueRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Queue not found"));
         return conversionService.convertToQueueDetailDTO(queue);
+    }
+
+    @PutMapping("/{id}")
+    ResponseEntity<QueueDetailDto> updateQueueStatus(@PathVariable Long id) {
+        Queue queueToUpdate = queueRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        queueToUpdate.setQueueStatus(!queueToUpdate.getQueueStatus());
+        queueRepository.save(queueToUpdate);
+
+        return ResponseEntity.ok(conversionService.convertToQueueDetailDTO(queueToUpdate));
     }
 }
