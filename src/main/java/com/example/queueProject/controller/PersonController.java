@@ -4,6 +4,7 @@ import com.example.queueProject.dto.PersonInputDetailDto;
 import com.example.queueProject.dto.PersonOutputDetailDto;
 import com.example.queueProject.entity.Person;
 import com.example.queueProject.repository.PersonRepository;
+import com.example.queueProject.repository.QueueRepository;
 import com.example.queueProject.services.ConversionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,17 +23,24 @@ public class PersonController {
 
     private final PersonRepository personRepository;
     private final ConversionService conversionService;
+    private final QueueRepository queueRepository;
 
-    public PersonController(PersonRepository personRepository, ConversionService conversionService) {
+    public PersonController(PersonRepository personRepository, ConversionService conversionService, QueueRepository queueRepository) {
         this.personRepository = personRepository;
         this.conversionService = conversionService;
+        this.queueRepository = queueRepository;
     }
 
     @PostMapping
     ResponseEntity<PersonInputDetailDto> addPerson(@RequestBody PersonInputDetailDto personInputDetailDto) {
         personInputDetailDto.setJoinedAtTime(LocalDateTime.now());
+        var queue = queueRepository.getQueueByQueueId(personInputDetailDto.getQueueId());
+        if (queue.getQueueStatus()){
         Person person = conversionService.convertToPersonEntity(personInputDetailDto);
-        personRepository.save(person);
+        personRepository.save(person);}
+        else {
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
+        }
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(personInputDetailDto.getPersonId()).toUri();
