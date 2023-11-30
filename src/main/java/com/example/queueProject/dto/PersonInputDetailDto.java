@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Setter
 @Getter
-public class PersonDto {
+public class PersonInputDetailDto {
 
     private Long personId;
     private Long positionInQueue;
