@@ -35,10 +35,12 @@ public class PersonController {
     ResponseEntity<PersonInputDetailDto> addPerson(@RequestBody PersonInputDetailDto personInputDetailDto) {
         personInputDetailDto.setJoinedAtTime(LocalDateTime.now());
         var queue = queueRepository.getQueueByQueueId(personInputDetailDto.getQueueId());
-        if (queue.getQueueStatus()){
-        Person person = conversionService.convertToPersonEntity(personInputDetailDto);
-        personRepository.save(person);}
-        else {
+        if (queue.getQueueStatus()) {
+            Person person = conversionService.convertToPersonEntity(personInputDetailDto);
+            Long currentPositionInQueue = personRepository.countByQueueQueueIdAndLeftAtTimeIsNull(queue.getQueueId());
+            person.setPositionInQueue((currentPositionInQueue + 1));
+            personRepository.save(person);
+        } else {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
         }
 
@@ -53,8 +55,7 @@ public class PersonController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         Long oldPositionInQueue = personToUpdate.getPositionInQueue();
-        Long newPositionInQueue = --oldPositionInQueue;
-        personToUpdate.setPositionInQueue(newPositionInQueue);
+        personToUpdate.setPositionInQueue(--oldPositionInQueue);
         personRepository.save(personToUpdate);
 
         return ResponseEntity.ok(conversionService.convertToPersonOutputDetailDto(personToUpdate));
