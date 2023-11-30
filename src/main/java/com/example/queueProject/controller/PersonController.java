@@ -48,7 +48,7 @@ public class PersonController {
     }
 
     @PutMapping("/{id}")
-    ResponseEntity<Person> updatePositionInQueue(@PathVariable Long id) {
+    ResponseEntity<PersonOutputDetailDto> updatePositionInQueue(@PathVariable Long id) {
         Person personToUpdate = personRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
@@ -57,18 +57,18 @@ public class PersonController {
         personToUpdate.setPositionInQueue(newPositionInQueue);
         personRepository.save(personToUpdate);
 
-        return ResponseEntity.ok(personToUpdate);
+        return ResponseEntity.ok(conversionService.convertToPersonOutputDetailDto(personToUpdate));
     }
 
     @PutMapping("/left/{id}")
-    ResponseEntity<Person> updateLeftAtTIme(@PathVariable Long id) {
+    ResponseEntity<PersonOutputDetailDto> updateLeftAtTIme(@PathVariable Long id) {
         Person personToUpdate = personRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         personToUpdate.setLeftAtTime(LocalDateTime.now());
         personRepository.save(personToUpdate);
 
-        return ResponseEntity.ok(personToUpdate);
+        return ResponseEntity.ok(conversionService.convertToPersonOutputDetailDto(personToUpdate));
     }
 
     @GetMapping
