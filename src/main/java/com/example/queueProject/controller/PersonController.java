@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/person")
 public class PersonController {
@@ -100,6 +101,11 @@ public class PersonController {
         return persons.stream()
                 .map(conversionService::convertToPersonOutputDetailDto)
                 .collect(Collectors.toList());
+    }
+
+    @GetMapping("/count")
+    Long getCountOfPersons(){
+        return personRepository.countBy();
     }
 
     @DeleteMapping("/{id}")
