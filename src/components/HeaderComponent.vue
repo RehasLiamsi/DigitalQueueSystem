@@ -7,5 +7,6 @@
 <style scoped>
 img{
   height: 4.5em;
+  margin-bottom: 0.8em;
 }
 </style>

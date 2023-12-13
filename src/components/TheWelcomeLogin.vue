@@ -16,9 +16,9 @@ const login = async () => {
       password: password.value
     });
     console.log(response.data);
-    alert('Login successful!');
-    store.dispatch('login', response.data.user);
-    router.push('/');
+    //alert('Login successful!');
+    //store.dispatch('login', response.data.user);
+    router.push('/admin');
   } catch (error) {
     console.error(error.response.data);
     alert('Login failed!');
