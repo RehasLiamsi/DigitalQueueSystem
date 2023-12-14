@@ -1,6 +1,7 @@
 <script setup>
 import axios from "axios";
 import {onMounted, ref} from "vue";
+import Cookies from "js-cookie";
 
 const peopleCount = ref(0);
 
@@ -9,6 +10,7 @@ const fetchEntriesCount = async () => {
     const response = await axios.get('http://localhost:8080/person/count');
     peopleCount.value = response.data;
   } catch (error) {
+    console.log("Stored Token: ", Cookies.get('jwtToken'));
     console.error("There was an error fetching the entries count:", error);
   }
 };
