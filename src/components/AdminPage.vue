@@ -2,6 +2,7 @@
 import axios from "axios";
 import {onMounted, ref} from "vue";
 import Cookies from "js-cookie";
+import { FwbDropdown, FwbListGroup, FwbListGroupItem } from 'flowbite-vue';
 
 const peopleCount = ref(0);
 
@@ -21,6 +22,15 @@ onMounted(fetchEntriesCount);
 <template>
 <div id="banner">
   <p>Welcome Admin!</p>
+  <fwb-dropdown text="Menu">
+    <fwb-list-group>
+      <fwb-list-group-item>Settings</fwb-list-group-item>
+      <fwb-list-group-item>Statistics</fwb-list-group-item>
+      <fwb-list-group-item>Logout</fwb-list-group-item>
+
+    </fwb-list-group>
+
+  </fwb-dropdown>
 </div>
   <div class="text-box">
     <p>There are <span> {{ peopleCount }} </span> people in the queue</p>
@@ -32,5 +42,19 @@ onMounted(fetchEntriesCount);
   background: #0167b2;
   padding: 0.4em 2em;
   color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.text-box{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.text-box p{
+  padding: 2em 0;
 }
 </style>
