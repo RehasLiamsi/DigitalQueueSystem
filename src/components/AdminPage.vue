@@ -3,8 +3,9 @@ import axiosInstance from "../axiosConfig";
 import {onMounted, ref} from "vue";
 import Cookies from "js-cookie";
 
-const showDropdown = ref(false)
+// const showDropdown = ref(false)
 const peopleCount = ref('');
+const activeQueue = ref('');
 
 const fetchEntriesCount = async () => {
   try {
@@ -16,11 +17,22 @@ const fetchEntriesCount = async () => {
   }
 };
 
-const toggleDropdown = () => {
-  showDropdown.value = !showDropdown.value
+const fetchActiveQueue = async () => {
+  try {
+    const response = await axiosInstance.get('');
+    activeQueue.value = response.data;
+  } catch (error) {
+    console.log("Stored Token: ", Cookies.get('jwtToken'));
+    console.error("There was an error fetching the active queue:", error);
+  }
 }
 
+// const toggleDropdown = () => {
+//   showDropdown.value = !showDropdown.value
+// }
+
 onMounted(fetchEntriesCount);
+onMounted(fetchActiveQueue);
 </script>
 
 <template>
@@ -38,6 +50,7 @@ onMounted(fetchEntriesCount);
 </div>
 </div>
   <div class="text-box">
+    <p>The active queue is <span> {{ activeQueue}}</span></p>
     <p>There are <span> {{ peopleCount }} </span> people in the queue</p>
   </div>
 </template>
