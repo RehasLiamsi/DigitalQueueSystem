@@ -2,8 +2,8 @@
 import axiosInstance from "../axiosConfig";
 import {onMounted, ref} from "vue";
 import Cookies from "js-cookie";
-import { FwbDropdown, FwbListGroup, FwbListGroupItem } from 'flowbite-vue';
 
+const showDropdown = ref(false)
 const peopleCount = ref('');
 
 const fetchEntriesCount = async () => {
@@ -16,21 +16,26 @@ const fetchEntriesCount = async () => {
   }
 };
 
+const toggleDropdown = () => {
+  showDropdown.value = !showDropdown.value
+}
+
 onMounted(fetchEntriesCount);
 </script>
 
 <template>
 <div id="banner">
   <p>Welcome Admin!</p>
-  <fwb-dropdown text="Menu">
-    <fwb-list-group>
-      <fwb-list-group-item>Settings</fwb-list-group-item>
-      <fwb-list-group-item>Statistics</fwb-list-group-item>
-      <fwb-list-group-item>Logout</fwb-list-group-item>
-
-    </fwb-list-group>
-
-  </fwb-dropdown>
+<!--  <div class="dropdown" @click="toggleDropdown">-->
+<!--    <span class="dropdown-link">Menu</span>-->
+<!--    <div v-if="showDropdown" class="dropdown-content" >-->
+  <div class="router-links">
+      <RouterLink to="/settings">Settings</RouterLink>
+      <RouterLink to="/statistics">Statistics</RouterLink>
+      <RouterLink to="/logout">Logout</RouterLink>
+<!--    </div>-->
+<!--  </div>-->
+</div>
 </div>
   <div class="text-box">
     <p>There are <span> {{ peopleCount }} </span> people in the queue</p>
@@ -40,11 +45,12 @@ onMounted(fetchEntriesCount);
 <style scoped>
 #banner{
   background: #0167b2;
-  padding: 0.4em 2em;
+  padding: 0.4em 4em;
   color: white;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .text-box{
@@ -57,4 +63,40 @@ onMounted(fetchEntriesCount);
 .text-box p{
   padding: 2em 0;
 }
+
+/*.dropdown {*/
+/*  position: relative;*/
+/*  display: inline-block;*/
+/*}*/
+
+.router-links{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+/*.dropdown-link {*/
+.router-links a{
+  text-decoration: none;
+  color: white;
+  cursor: pointer;
+  margin: 10px;
+}
+
+/*.dropdown-content {*/
+/*  display: flex;*/
+/*  flex-direction: column;*/
+/*  position: absolute;*/
+/*  background-color: #f9f9f9;*/
+/*  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);*/
+/*  padding: 12px 16px;*/
+/*  left: -50%;*/
+/*  margin-top: 0.5em;*/
+/*}*/
+
+/*.dropdown-content a{*/
+/*  padding: 0.5em 0.2em;*/
+/*  width: auto;*/
+/*  text-decoration: none;*/
+/*  color: black;*/
+/*}*/
 </style>
