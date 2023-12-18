@@ -1,14 +1,14 @@
 <script setup>
-import axios from "axios";
+import axiosInstance from "../axiosConfig";
 import {onMounted, ref} from "vue";
 import Cookies from "js-cookie";
 import { FwbDropdown, FwbListGroup, FwbListGroupItem } from 'flowbite-vue';
 
-const peopleCount = ref(0);
+const peopleCount = ref('');
 
 const fetchEntriesCount = async () => {
   try {
-    const response = await axios.get('http://localhost:8080/person/count');
+    const response = await axiosInstance.get('/person/count');
     peopleCount.value = response.data;
   } catch (error) {
     console.log("Stored Token: ", Cookies.get('jwtToken'));

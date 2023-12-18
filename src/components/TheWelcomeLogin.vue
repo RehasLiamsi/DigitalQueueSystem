@@ -1,8 +1,8 @@
 <script setup>
-import axios from 'axios';
-import {ref} from 'vue';
-import {useRouter} from 'vue-router';
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import Cookies from 'js-cookie';
+import axiosInstance from '../axiosConfig';
 
 const router = useRouter();
 const email = ref('');
@@ -12,19 +12,9 @@ const storeToken = (token) => {
   Cookies.set('jwtToken', token, {expires: 1});
 }
 
-axios.interceptors.request.use((config) => {
-  const token = Cookies.get('jwtToken');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-}, (error) => {
-  return Promise.reject(error);
-});
-
 const login = async (credentials) => {
   try {
-    const response = await axios.post('http://localhost:8080/api/v1/auth/authenticate', credentials);
+    const response = await axiosInstance.post('/api/v1/auth/authenticate', credentials);
     console.log(response.data);
     await router.push('/admin');
     const token = response.data.token;
@@ -48,6 +38,7 @@ const handleLogin = async () => {
   }
 };
 </script>
+
 
 <template>
   <div class="container">
