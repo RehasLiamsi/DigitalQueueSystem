@@ -57,4 +57,11 @@ public class QueueController {
 
         return ResponseEntity.ok(conversionService.convertToQueueDetailDTO(queueToUpdate));
     }
+
+    @GetMapping("/active")
+    public QueueSummaryDto getQueueByQueueStatus() {
+        Boolean status = true;
+        Queue queue = queueRepository.getQueueByQueueStatus(status);
+        return conversionService.convertToQueueSummaryDTO(queue);
+    }
 }
