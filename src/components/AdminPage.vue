@@ -42,7 +42,7 @@ const toggleQueueStatus = async () => {
     await axiosInstance.put(`queue/${activeQueueId.value}`);
   } catch (error) {
     console.error("There was an error toggling the queue status:", error);
-  }
+  }location.reload();
 }
 
  const toggleDropdown = () => {
