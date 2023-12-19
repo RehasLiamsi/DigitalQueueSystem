@@ -60,23 +60,37 @@ public class QueueController {
     }
 
     @GetMapping("/active")
-    public QueueSummaryDto getQueueByQueueStatus() {
+    public ResponseEntity<?> getQueueByQueueStatus() {
         Boolean status = true;
         Queue queue = queueRepository.getQueueByQueueStatus(status);
-        return conversionService.convertToQueueSummaryDTO(queue);
+        if (queue == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Entity not found");
+        }
+        else{
+        return ResponseEntity.ok(conversionService.convertToQueueSummaryDTO(queue));
+        }
     }
 
     @GetMapping("/active/name")
-    public String getQueueNameByQueueStatus() {
+    public ResponseEntity<?> getQueueNameByQueueStatus() {
         Boolean status = true;
         Queue queue = queueRepository.getQueueByQueueStatus(status);
-        return queue.getQueueName();
+        if (queue == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Entity not found");        }
+        else {
+            return ResponseEntity.ok(queue.getQueueName());
+        }
     }
 
     @GetMapping("/active/id")
-    public Long getQueueIdByQueueStatus() {
+    public ResponseEntity<?> getQueueIdByQueueStatus() {
         Boolean status = true;
         Queue queue = queueRepository.getQueueByQueueStatus(status);
-        return queue.getQueueId();
+        if (queue == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Entity not found");
+        }
+        else{
+            return ResponseEntity.ok(queue.getQueueId());
+        }
     }
 }
