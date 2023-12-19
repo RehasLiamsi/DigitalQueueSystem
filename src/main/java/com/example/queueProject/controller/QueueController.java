@@ -14,6 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/queue")
 public class QueueController {
@@ -63,5 +64,19 @@ public class QueueController {
         Boolean status = true;
         Queue queue = queueRepository.getQueueByQueueStatus(status);
         return conversionService.convertToQueueSummaryDTO(queue);
+    }
+
+    @GetMapping("/active/name")
+    public String getQueueNameByQueueStatus() {
+        Boolean status = true;
+        Queue queue = queueRepository.getQueueByQueueStatus(status);
+        return queue.getQueueName();
+    }
+
+    @GetMapping("/active/id")
+    public Long getQueueIdByQueueStatus() {
+        Boolean status = true;
+        Queue queue = queueRepository.getQueueByQueueStatus(status);
+        return queue.getQueueId();
     }
 }

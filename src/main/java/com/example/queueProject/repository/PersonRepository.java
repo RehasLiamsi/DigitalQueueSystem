@@ -15,4 +15,6 @@ public interface PersonRepository extends ListCrudRepository<Person, Long> {
     Long countByQueueQueueIdAndLeftAtTimeIsNull(Long queueId);
 
     Long countBy();
+
+    Long countByQueue_QueueStatusAndLeftAtTimeIsNull(Boolean status);
 }
