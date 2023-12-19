@@ -3,13 +3,13 @@ import axiosInstance from "../axiosConfig";
 import {onMounted, ref} from "vue";
 import Cookies from "js-cookie";
 
-// const showDropdown = ref(false)
+const showDropdown = ref(false)
 const peopleCount = ref('');
 const activeQueue = ref('');
 
 const fetchEntriesCount = async () => {
   try {
-    const response = await axiosInstance.get('/person/count');
+    const response = await axiosInstance.get('/person/count/activeQueue');
     peopleCount.value = response.data;
   } catch (error) {
     console.log("Stored Token: ", Cookies.get('jwtToken'));
@@ -17,9 +17,9 @@ const fetchEntriesCount = async () => {
   }
 };
 
-const fetchActiveQueue = async () => {
+const fetchActiveQueueName = async () => {
   try {
-    const response = await axiosInstance.get('');
+    const response = await axiosInstance.get('/queue/active/name');
     activeQueue.value = response.data;
   } catch (error) {
     console.log("Stored Token: ", Cookies.get('jwtToken'));
@@ -27,30 +27,36 @@ const fetchActiveQueue = async () => {
   }
 }
 
-// const toggleDropdown = () => {
-//   showDropdown.value = !showDropdown.value
-// }
+ const toggleDropdown = () => {
+   showDropdown.value = !showDropdown.value
+ }
 
 onMounted(fetchEntriesCount);
-onMounted(fetchActiveQueue);
+onMounted(fetchActiveQueueName);
 </script>
 
 <template>
 <div id="banner">
   <p>Welcome Admin!</p>
-<!--  <div class="dropdown" @click="toggleDropdown">-->
-<!--    <span class="dropdown-link">Menu</span>-->
-<!--    <div v-if="showDropdown" class="dropdown-content" >-->
   <div class="router-links">
-      <RouterLink to="/settings">Settings</RouterLink>
+  <div class="dropdown" @click="toggleDropdown">
+   <span class="dropdown-link">Settings</span>
+    <div v-if="showDropdown" class="dropdown-content" >
+      <ul>
+        <li>Close queue</li>
+      </ul>
+  </div>
+    </div>
+
+<!--      <RouterLink to="/settings">Settings</RouterLink>-->
       <RouterLink to="/statistics">Statistics</RouterLink>
       <RouterLink to="/logout">Logout</RouterLink>
-<!--    </div>-->
-<!--  </div>-->
+
+
 </div>
 </div>
   <div class="text-box">
-    <p>The active queue is <span> {{ activeQueue}}</span></p>
+    <p>The active queue is "<span> {{ activeQueue}}</span>"</p>
     <p>There are <span> {{ peopleCount }} </span> people in the queue</p>
   </div>
 </template>
@@ -71,23 +77,16 @@ onMounted(fetchActiveQueue);
   flex-wrap: wrap;
   justify-content: space-around;
   align-items: center;
+  flex-direction: column;
+  margin: 2em 0;
 }
-
-.text-box p{
-  padding: 2em 0;
-}
-
-/*.dropdown {*/
-/*  position: relative;*/
-/*  display: inline-block;*/
-/*}*/
 
 .router-links{
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
-/*.dropdown-link {*/
+.dropdown-link,
 .router-links a{
   text-decoration: none;
   color: white;
@@ -95,21 +94,35 @@ onMounted(fetchActiveQueue);
   margin: 10px;
 }
 
-/*.dropdown-content {*/
-/*  display: flex;*/
-/*  flex-direction: column;*/
-/*  position: absolute;*/
-/*  background-color: #f9f9f9;*/
-/*  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);*/
-/*  padding: 12px 16px;*/
-/*  left: -50%;*/
-/*  margin-top: 0.5em;*/
-/*}*/
+.dropdown-link{
+  display: inline-flex;
+  margin-bottom: 0;
+}
 
-/*.dropdown-content a{*/
-/*  padding: 0.5em 0.2em;*/
-/*  width: auto;*/
-/*  text-decoration: none;*/
-/*  color: black;*/
-/*}*/
+.dropdown-content {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  position: absolute;
+  background-color: #f9f9f9;
+  color: black;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  padding: 12px 0;
+  margin-top: 0.5em;
+  min-width: 120px;
+}
+
+.dropdown-content ul{
+  list-style: none;
+  margin: 0;
+  padding: 0.5em 0 0.5em 1em;
+}
+
+.dropdown-content a{
+  padding: 0.5em 0.2em;
+  width: auto;
+  text-decoration: none;
+  color: black;
+  
+}
 </style>
