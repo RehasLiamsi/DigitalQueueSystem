@@ -60,11 +60,12 @@ onMounted(fetchActiveQueueId);
   <div class="router-links">
   <div class="dropdown" @click="toggleDropdown">
    <span class="dropdown-link">Settings</span>
-    <div v-if="showDropdown" class="dropdown-content" >
+    <div v-if="showDropdown" class="dropdown-content">
+    <div  v-if="activeQueue != ''"  @click="toggleQueueStatus">Close queue</div>
+    <div  v-else>
+      <RouterLink to="/queues">Queues</RouterLink></div>
+    </div>
 
-        <div @click="toggleQueueStatus">Close queue</div>
-
-  </div>
     </div>
 
 <!--      <RouterLink to="/settings">Settings</RouterLink>-->
@@ -127,9 +128,10 @@ onMounted(fetchActiveQueueId);
   background-color: #f9f9f9;
   color: black;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  padding: 12px 0;
+  padding: 12px 0 12px 12px;
   margin-top: 0.5em;
   min-width: 120px;
+  cursor: pointer;
 }
 
 .dropdown-content ul{
