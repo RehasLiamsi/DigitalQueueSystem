@@ -6,6 +6,7 @@ import Cookies from "js-cookie";
 const showDropdown = ref(false)
 const peopleCount = ref('');
 const activeQueue = ref('');
+const activeQueueId = ref('');
 
 const fetchEntriesCount = async () => {
   try {
@@ -27,12 +28,30 @@ const fetchActiveQueueName = async () => {
   }
 }
 
+const fetchActiveQueueId = async () => {
+  try {
+    const response = await axiosInstance.get('queue/active/id')
+    activeQueueId.value = response.data;
+  } catch (error) {
+    console.error("There was an error fetching the active queue Id:", error);
+  }
+}
+
+const toggleQueueStatus = async () => {
+  try {
+    await axiosInstance.put(`queue/${activeQueueId.value}`);
+  } catch (error) {
+    console.error("There was an error toggling the queue status:", error);
+  }
+}
+
  const toggleDropdown = () => {
    showDropdown.value = !showDropdown.value
  }
 
 onMounted(fetchEntriesCount);
 onMounted(fetchActiveQueueName);
+onMounted(fetchActiveQueueId);
 </script>
 
 <template>
@@ -42,22 +61,23 @@ onMounted(fetchActiveQueueName);
   <div class="dropdown" @click="toggleDropdown">
    <span class="dropdown-link">Settings</span>
     <div v-if="showDropdown" class="dropdown-content" >
-      <ul>
-        <li>Close queue</li>
-      </ul>
+
+        <div @click="toggleQueueStatus">Close queue</div>
+
   </div>
     </div>
 
 <!--      <RouterLink to="/settings">Settings</RouterLink>-->
-      <RouterLink to="/statistics">Statistics</RouterLink>
+<!--      <RouterLink to="/statistics">Statistics</RouterLink>-->
       <RouterLink to="/logout">Logout</RouterLink>
 
 
 </div>
 </div>
   <div class="text-box">
-    <p>The active queue is "<span> {{ activeQueue}}</span>"</p>
-    <p>There are <span> {{ peopleCount }} </span> people in the queue</p>
+    <p v-if="activeQueue===''"> No queue is active.</p>
+    <p v-else>The active queue is "<span> {{ activeQueue}}</span>"
+    <br><br>There are <span> {{ peopleCount }} </span> people in the queue</p>
   </div>
 </template>
 
@@ -123,6 +143,6 @@ onMounted(fetchActiveQueueName);
   width: auto;
   text-decoration: none;
   color: black;
-  
+
 }
 </style>
