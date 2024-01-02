@@ -1,4 +1,5 @@
 <script setup>
+import "bootstrap/dist/css/bootstrap.min.css";
 import axiosInstance from "../axiosConfig";
 import {onMounted, ref} from "vue";
 import Cookies from "js-cookie";
@@ -43,8 +44,6 @@ onMounted(fetchActiveQueueName);
 </template>
 
 <style scoped>
-
-
 .text-box{
   display: flex;
   flex-wrap: wrap;
@@ -53,6 +52,4 @@ onMounted(fetchActiveQueueName);
   flex-direction: column;
   margin: 2em 0;
 }
-
-
 </style>
