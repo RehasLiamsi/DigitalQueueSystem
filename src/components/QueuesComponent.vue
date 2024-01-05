@@ -1,5 +1,5 @@
 <script setup>
-import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/css/bootstrap.css";
 import BannerComponent from "@/components/BannerComponent.vue";
 import {onMounted, ref} from "vue";
 import axiosInstance from "@/axiosConfig";
@@ -38,8 +38,9 @@ onMounted(fetchAllQueues);
 <!--    <li>{{queue.queueName}}</li>-->
 <!--    <li>{{queue.queueStatus}}</li>-->
 <!--  </ul>-->
-  <table id="tableComponent" class="table table-bordered table-striped">
-    <thead>
+  <div class="m-5">
+  <table class="table table-hover table-bordered ">
+   <thead>
     <tr>
       <th v-for="field in fields" :key='field' @click="sortTable(field)">
         {{ field }} <i class="bi bi-sort-alpha-down" aria-label='Sort Icon'></i>
@@ -51,15 +52,12 @@ onMounted(fetchAllQueues);
       <td>{{ queue.queueId }}</td>
       <td>{{ queue.queueName }}</td>
       <td>
-        <button @click="toggleStatus(queue.queueId)">{{ getStatusText(queue.queueStatus) }}</button>
+        <button type="button" class="btn btn-outline-primary btn-sm" @click="toggleStatus(queue.queueId)">{{ getStatusText(queue.queueStatus) }}</button>
       </td>
     </tr>
     </tbody>
   </table>
-
+  </div>
 </template>
 <style scoped>
-#tableComponent {
-  margin: 1em;
-}
 </style>
