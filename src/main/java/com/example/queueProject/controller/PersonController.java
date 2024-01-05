@@ -114,6 +114,11 @@ public class PersonController {
         return personRepository.countByQueue_QueueStatusAndLeftAtTimeIsNull(status);
     }
 
+    @GetMapping("/count/{queueId}")
+    Long getTotalCountOfPersonsInQueue(@PathVariable Long queueId){
+        return personRepository.countByQueueQueueId(queueId);
+    }
+
     @DeleteMapping("/{id}")
     void deletePerson(@PathVariable Long id) {
         if (personRepository.findById(id).isPresent())
