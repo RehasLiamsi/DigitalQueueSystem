@@ -6,9 +6,11 @@ import Cookies from "js-cookie";
 import BannerComponent from "@/components/BannerComponent.vue";
 
 const peopleCount = ref('');
-const activeQueue = ref('');
+const activeQueueName = ref('');
+const activeQueueId = ref('');
+const totalPeopleServed = ref('');
 
-const fetchEntriesCount = async () => {
+const fetchPeopleCount = async () => {
   try {
     const response = await axiosInstance.get('/person/count/activeQueue');
     peopleCount.value = response.data;
@@ -21,35 +23,61 @@ const fetchEntriesCount = async () => {
 const fetchActiveQueueName = async () => {
   try {
     const response = await axiosInstance.get('/queue/active/name');
-    activeQueue.value = response.data;
+    activeQueueName.value = response.data;
   } catch (error) {
     console.log("Stored Token: ", Cookies.get('jwtToken'));
     console.error("There was an error fetching the active queue:", error);
   }
 }
 
+const fetchActiveQueueId = async () => {
+  try {
+    const response = await axiosInstance.get('/queue/active/id');
+    activeQueueId.value = response.data;
+  } catch (error) {
+    console.error("Error fetching active queue ID:", error);
+  }
+}
 
-onMounted(fetchEntriesCount);
-onMounted(fetchActiveQueueName);
+const fetchTotalPeopleServed = async () => {
+  try {
+    const response = await axiosInstance.get(`/person/count/${activeQueueId.value}`);
+    totalPeopleServed.value = response.data;
+  } catch (error) {
+    console.log("Active queue Id not being fetched: ", activeQueueId.value)
+    console.error("Error fetching total people served since start")
+  }
+}
+
+const fetchData = async () => {
+  await fetchActiveQueueId();
+  await fetchActiveQueueName();
+  await fetchPeopleCount();
+  await fetchTotalPeopleServed();
+}
+
+onMounted(fetchData);
+setInterval(fetchData, 3000);
 </script>
 
 <template>
-  <BannerComponent />
+  <BannerComponent/>
 
   <div class="text-box">
-    <p v-if="activeQueue===''"> No queue is active.</p>
-    <p v-else>The active queue is "<span> {{ activeQueue}}</span>"
-    <br><br>There are <span> {{ peopleCount }} </span> people in the queue</p>
+    <p v-if="activeQueueName===''"> No queue is active.</p>
+    <p v-else>The active queue is "<span> {{ activeQueueName }}</span>"
+      <br><br>There are <span> {{ peopleCount }} </span> people standing in this queue.
+      <br><br>Total number of people served today is : <span> {{ totalPeopleServed }}</span></p>
   </div>
 </template>
 
 <style scoped>
-.text-box{
+.text-box {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
   align-items: center;
   flex-direction: column;
-  margin: 2em 0;
+  margin: 3em 0;
 }
 </style>

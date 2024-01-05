@@ -28,7 +28,9 @@ const toggleStatus = async (queueId) => {
     console.log("Error changing queue status:", error);
   }
 }
+
 onMounted(fetchAllQueues);
+//setInterval(fetchAllQueues,1000);
 </script>
 <template>
   <BannerComponent/>
@@ -56,4 +58,8 @@ onMounted(fetchAllQueues);
   </table>
 
 </template>
-<style scoped></style>
+<style scoped>
+#tableComponent {
+  margin: 1em;
+}
+</style>
