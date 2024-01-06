@@ -33,7 +33,7 @@ public class PersonController {
     }
 
     @PostMapping("/add/{queueId}")
-    ResponseEntity<PersonInputDetailDto> addPerson(@PathVariable Long queueId) {
+    ResponseEntity<PersonOutputDetailDto> addPerson(@PathVariable Long queueId) {
         PersonInputDetailDto personInputDetailDto = new PersonInputDetailDto();
         personInputDetailDto.setJoinedAtTime(LocalDateTime.now());
         personInputDetailDto.setQueueId(queueId);
@@ -43,13 +43,18 @@ public class PersonController {
             Long currentPositionInQueue = personRepository.countByQueueQueueIdAndLeftAtTimeIsNull(queue.getQueueId());
             person.setPositionInQueue((currentPositionInQueue + 1));
             personRepository.save(person);
+
+            PersonOutputDetailDto personOutputDetailDto = conversionService.convertToPersonOutputDetailDto(person);
+
+            URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                    .buildAndExpand(personInputDetailDto.getPersonId()).toUri();
+            return ResponseEntity.created(location).body(personOutputDetailDto);
+
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
         }
 
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-                .buildAndExpand(personInputDetailDto.getPersonId()).toUri();
-        return ResponseEntity.created(location).build();
+
     }
 
     /*@PostMapping
