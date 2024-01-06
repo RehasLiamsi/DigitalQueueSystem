@@ -32,7 +32,27 @@ public class PersonController {
         this.queueRepository = queueRepository;
     }
 
-    @PostMapping
+    @PostMapping("/add/{queueId}")
+    ResponseEntity<PersonInputDetailDto> addPerson(@PathVariable Long queueId) {
+        PersonInputDetailDto personInputDetailDto = new PersonInputDetailDto();
+        personInputDetailDto.setJoinedAtTime(LocalDateTime.now());
+        personInputDetailDto.setQueueId(queueId);
+        var queue = queueRepository.getQueueByQueueId(queueId);
+        if (queue.getQueueStatus()) {
+            Person person = conversionService.convertToPersonEntity(personInputDetailDto);
+            Long currentPositionInQueue = personRepository.countByQueueQueueIdAndLeftAtTimeIsNull(queue.getQueueId());
+            person.setPositionInQueue((currentPositionInQueue + 1));
+            personRepository.save(person);
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(personInputDetailDto.getPersonId()).toUri();
+        return ResponseEntity.created(location).build();
+    }
+
+    /*@PostMapping
     ResponseEntity<PersonInputDetailDto> addPerson(@RequestBody PersonInputDetailDto personInputDetailDto) {
         personInputDetailDto.setJoinedAtTime(LocalDateTime.now());
         var queue = queueRepository.getQueueByQueueId(personInputDetailDto.getQueueId());
@@ -48,9 +68,9 @@ public class PersonController {
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(personInputDetailDto.getPersonId()).toUri();
         return ResponseEntity.created(location).build();
-    }
+    }*/
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     ResponseEntity<PersonOutputDetailDto> updatePositionInQueue(@PathVariable Long id) {
         Person personToUpdate = personRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -119,7 +139,7 @@ public class PersonController {
         return personRepository.countByQueueQueueId(queueId);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     void deletePerson(@PathVariable Long id) {
         if (personRepository.findById(id).isPresent())
             personRepository.deleteById(id);
