@@ -1,11 +1,11 @@
 <script setup>
 import {onMounted, onUnmounted, ref} from "vue";
-//import {useRouter} from "vue-router";
+import {useRouter} from "vue-router";
 import axios from "axios";
 
 const person = ref('');
 const hasJoinedQueue = ref(sessionStorage.getItem('joinedQueue') === 'true');
-//const router = useRouter();
+const router = useRouter();
 const positionInQueue = ref('');
 
 
@@ -43,8 +43,8 @@ const leaveQueue = async () => {
     sessionStorage.removeItem('joinedQueue');
     sessionStorage.removeItem('person');
     person.value = {};
-    //await router.push('/leftQueue')
     clearInterval();
+    await router.push('/leftQueue')
   } catch (error) {
     console.error("Error leaving the queue:", error);
   }
