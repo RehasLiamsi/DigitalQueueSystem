@@ -131,6 +131,13 @@ public class PersonController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("/{personId}/position")
+    Long getPositionInQueueByPersonId(@PathVariable Long personId) {
+        Person person = personRepository.findById(personId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return person.getPositionInQueue();
+    }
+
     @GetMapping("/count")
     Long getCountOfPersons() {
         return personRepository.countBy();
