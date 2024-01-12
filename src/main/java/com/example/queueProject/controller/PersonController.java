@@ -80,22 +80,25 @@ public class PersonController {
         Person personToUpdate = personRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        Long oldPositionInQueue = personToUpdate.getPositionInQueue();
-        personToUpdate.setPositionInQueue(--oldPositionInQueue);
-        personRepository.save(personToUpdate);
+        updateQueuePositions(personToUpdate);
 
         return ResponseEntity.ok(conversionService.convertToPersonOutputDetailDto(personToUpdate));
     }
 
     @PutMapping("/left/{id}")
     ResponseEntity<PersonOutputDetailDto> updateLeftAtTIme(@PathVariable Long id) {
-        Person personToUpdate = personRepository.findById(id)
+        Person personLeaving = personRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        personToUpdate.setLeftAtTime(LocalDateTime.now());
-        personRepository.save(personToUpdate);
+        personLeaving.setLeftAtTime(LocalDateTime.now());
+        personRepository.save(personLeaving);
 
-        return ResponseEntity.ok(conversionService.convertToPersonOutputDetailDto(personToUpdate));
+        List<Person> personsToUpdate = personRepository.findAllByJoinedAtTimeAfterAndLeftAtTimeIsNull(personLeaving.getJoinedAtTime());
+        for (Person person : personsToUpdate) {
+            updateQueuePositions(person);
+        }
+
+        return ResponseEntity.ok(conversionService.convertToPersonOutputDetailDto(personLeaving));
     }
 
     @GetMapping
@@ -129,18 +132,18 @@ public class PersonController {
     }
 
     @GetMapping("/count")
-    Long getCountOfPersons(){
+    Long getCountOfPersons() {
         return personRepository.countBy();
     }
 
     @GetMapping("/count/activeQueue")
-    Long getCountOfPersonsInActiveQueue(){
+    Long getCountOfPersonsInActiveQueue() {
         Boolean status = true;
         return personRepository.countByQueue_QueueStatusAndLeftAtTimeIsNull(status);
     }
 
     @GetMapping("/count/{queueId}")
-    Long getTotalCountOfPersonsInQueue(@PathVariable Long queueId){
+    Long getTotalCountOfPersonsInQueue(@PathVariable Long queueId) {
         return personRepository.countByQueueQueueId(queueId);
     }
 
@@ -152,5 +155,9 @@ public class PersonController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
 
-
+    private void updateQueuePositions(Person person) {
+        Long oldPosition = person.getPositionInQueue();
+        person.setPositionInQueue(--oldPosition);
+        personRepository.save(person);
+    }
 }
