@@ -6,6 +6,7 @@ import axiosInstance from "@/axiosConfig";
 
 const queues = ref('');
 const fields = ['Queue Name', 'Queue Status'];
+const queueName = ref('');
 
 const fetchAllQueues = async () => {
   try {
@@ -41,6 +42,16 @@ const deleteQueue = async (queueId) => {
   }
 }
 
+const addQueue = async() => {
+  const details = { queueName: queueName.value, queueStatus: 0 };
+  try {
+    await axiosInstance.post('/queue', details);
+    await fetchAllQueues();
+  } catch (error) {
+    console.error('Error adding Queue', error);
+  }
+}
+
 onMounted(fetchAllQueues);
 //setInterval(fetchAllQueues,1000);
 </script>
@@ -54,7 +65,7 @@ onMounted(fetchAllQueues);
     <table class="table table-hover table-bordered ">
       <thead>
       <tr>
-        <th v-for="field in fields" :key='field' @click="sortTable(field)">
+        <th v-for="field in fields" :key='field'>
           {{ field }} <i class="bi bi-sort-alpha-down" aria-label='Sort Icon'></i>
         </th>
       </tr>
@@ -70,6 +81,20 @@ onMounted(fetchAllQueues);
         <td>
           <button type="button" class="btn btn-outline-primary btn-sm" @click="deleteQueue(queue.queueId)">Delete
             Queue
+          </button>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <input type="text" id="queueName" v-model="queueName" required placeholder="Queue Name">
+        </td>
+<!--        <td>-->
+<!--          <button type="button" class="btn btn-outline-primary btn-sm" @click="toggleStatus(queue.queueId)">-->
+<!--            {{ getStatusText(queue.queueStatus) }}-->
+<!--          </button>-->
+<!--        </td>-->
+        <td>
+          <button type="button" class="btn btn-outline-primary btn-sm" @click="addQueue()">Add Queue
           </button>
         </td>
       </tr>
