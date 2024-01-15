@@ -9,6 +9,7 @@ const peopleCount = ref('');
 const activeQueueName = ref('');
 const activeQueueId = ref('');
 const totalPeopleServed = ref('');
+const firstPersonInQueue = ref('');
 
 const fetchPeopleCount = async () => {
   try {
@@ -49,11 +50,29 @@ const fetchTotalPeopleServedToday = async () => {
   }
 }
 
+const fetchFirstPersonInQueue = async () => {
+  try {
+    const response = await axiosInstance.get(`/person/activeQueue/first`);
+    firstPersonInQueue.value = response.data;
+  } catch (error) {
+    console.error("Error fetching first person in queue:", error)
+  }
+}
+
+const dropFirstPersonInQueue = async () => {
+  try {
+    await axiosInstance.put(`person/left/${firstPersonInQueue.value.personId}`)
+  } catch (error) {
+    console.error("Error dropping first person from queue:", error);
+  }
+}
+
 const fetchData = async () => {
   await fetchActiveQueueId();
   await fetchActiveQueueName();
   await fetchPeopleCount();
   await fetchTotalPeopleServedToday();
+  await fetchFirstPersonInQueue();
 }
 
 onMounted(fetchData);
@@ -69,6 +88,9 @@ setInterval(fetchData, 3000);
       <br><br>There are <span> {{ peopleCount }} </span> people standing in this queue.
       <br><br>Total number of people served today is : <span> {{ totalPeopleServed }}</span></p>
   </div>
+  <button type="button" class="btn btn-outline-primary btn-sm" @click="dropFirstPersonInQueue()">
+    Next person in Queue
+  </button>
 </template>
 
 <style scoped>
