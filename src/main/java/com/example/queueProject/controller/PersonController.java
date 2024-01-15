@@ -13,7 +13,9 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -101,6 +103,16 @@ public class PersonController {
         return ResponseEntity.ok(conversionService.convertToPersonOutputDetailDto(personLeaving));
     }
 
+    @PutMapping("/left/all/{queueName}")
+    ResponseEntity<PersonOutputDetailDto> dropAllPersonsFromQueue(@PathVariable String queueName) {
+        List<Person> allActivePersonsInQueue = personRepository.findAllByQueue_QueueNameAndLeftAtTimeIsNull(queueName);
+        for (Person person : allActivePersonsInQueue) {
+            person.setLeftAtTime(LocalDateTime.now());
+            personRepository.save(person);
+        }
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping
     List<PersonOutputDetailDto> getPersons() {
         List<Person> persons = personRepository.findAll();
@@ -149,9 +161,12 @@ public class PersonController {
         return personRepository.countByQueue_QueueStatusAndLeftAtTimeIsNull(status);
     }
 
-    @GetMapping("/count/{queueId}")
-    Long getTotalCountOfPersonsInQueue(@PathVariable Long queueId) {
-        return personRepository.countByQueueQueueId(queueId);
+    @GetMapping("/count/all/{queueId}")
+    Long getTotalCountOfPersonsWhoJoinedQueueDuringTheDay(@PathVariable Long queueId) {
+        LocalDate today = LocalDate.now();
+        LocalDateTime startOfDay = today.atStartOfDay();
+        LocalDateTime endOfDay = LocalDateTime.of(today, LocalTime.MAX);
+        return personRepository.countByQueueQueueIdAndJoinedAtTimeBetween(queueId, startOfDay, endOfDay);
     }
 
     @DeleteMapping("/delete/{id}")

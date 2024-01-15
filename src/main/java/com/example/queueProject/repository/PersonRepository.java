@@ -19,7 +19,15 @@ public interface PersonRepository extends ListCrudRepository<Person, Long> {
 
     Long countByQueue_QueueStatusAndLeftAtTimeIsNull(Boolean status);
 
+    List<Person> findAllByQueue_QueueId(Long queueId);
+
     Long countByQueueQueueId(Long queueId);
 
+    Long countByQueueQueueIdAndJoinedAtTimeBetween(Long queueId, LocalDateTime startOfDay, LocalDateTime endOfDay);
+    //Long countByJoinedAtTimeBetween(LocalDateTime startOfDay, LocalDateTime endOfDay);
+
+
     List<Person> findAllByJoinedAtTimeAfterAndLeftAtTimeIsNull(LocalDateTime joinedAtTime);
+
+    List<Person> findAllByQueue_QueueNameAndLeftAtTimeIsNull(String queueName);
 }
