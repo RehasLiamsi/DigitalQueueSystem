@@ -28,6 +28,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authz -> authz
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers("/person/**").permitAll()
+                        .requestMatchers("/queue/active/id").permitAll()
                         // Add more patterns as needed
                         .anyRequest().authenticated()
                 ))
