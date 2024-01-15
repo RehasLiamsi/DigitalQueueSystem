@@ -39,9 +39,9 @@ const fetchActiveQueueId = async () => {
   }
 }
 
-const fetchTotalPeopleServed = async () => {
+const fetchTotalPeopleServedToday = async () => {
   try {
-    const response = await axiosInstance.get(`/person/count/${activeQueueId.value}`);
+    const response = await axiosInstance.get(`/person/count/all/${activeQueueId.value}`);
     totalPeopleServed.value = response.data;
   } catch (error) {
     console.log("Active queue Id not being fetched: ", activeQueueId.value)
@@ -53,7 +53,7 @@ const fetchData = async () => {
   await fetchActiveQueueId();
   await fetchActiveQueueName();
   await fetchPeopleCount();
-  await fetchTotalPeopleServed();
+  await fetchTotalPeopleServedToday();
 }
 
 onMounted(fetchData);
