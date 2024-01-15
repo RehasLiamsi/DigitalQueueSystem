@@ -135,6 +135,14 @@ public class PersonController {
         return conversionService.convertToPersonOutputDetailDto(person);
     }
 
+    @GetMapping("/activeQueue/first")
+    ResponseEntity<PersonOutputDetailDto> getFirstPersonInActiveQueue() {
+        Boolean queueStatus = true;
+        Long positionInQueue = 1L;
+        Person person = personRepository.findByQueue_QueueStatusAndPositionInQueue(queueStatus, positionInQueue);
+        return ResponseEntity.ok(conversionService.convertToPersonOutputDetailDto(person));
+    }
+
     @GetMapping("/queue/{queueName}")
     List<PersonOutputDetailDto> getPersonsByQueueName(@PathVariable String queueName) {
         List<Person> persons = personRepository.findAllByQueue_QueueName(queueName);
