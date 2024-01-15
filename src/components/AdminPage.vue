@@ -87,10 +87,11 @@ setInterval(fetchData, 3000);
     <p v-else>The active queue is "<span> {{ activeQueueName }}</span>"
       <br><br>There are <span> {{ peopleCount }} </span> people standing in this queue.
       <br><br>Total number of people served today is : <span> {{ totalPeopleServed }}</span></p>
+
+    <button type="button" @click="dropFirstPersonInQueue()">
+      Go to next person in Queue
+    </button>
   </div>
-  <button type="button" class="btn btn-outline-primary btn-sm" @click="dropFirstPersonInQueue()">
-    Next person in Queue
-  </button>
 </template>
 
 <style scoped>
@@ -101,5 +102,14 @@ setInterval(fetchData, 3000);
   align-items: center;
   flex-direction: column;
   margin: 3em 0;
+}
+
+button {
+  background: #0167b2;
+  color: white;
+  border-radius: 0.3em;
+  border-style: none;
+  padding: 0.5em 5em;
+  margin: 1em 0.3em;
 }
 </style>
