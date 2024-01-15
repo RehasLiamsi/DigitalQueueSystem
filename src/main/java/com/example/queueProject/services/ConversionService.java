@@ -31,7 +31,7 @@ public class ConversionService {
         if (person.getQueue() != null) {
         dto.setQueueName(person.getQueue().getQueueName());}
         else {
-            dto.setQueueName("No connected Queue");
+            dto.setQueueName("No queue found");
         }
         return dto;
     }

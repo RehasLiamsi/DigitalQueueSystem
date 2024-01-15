@@ -93,6 +93,7 @@ public class PersonController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         personLeaving.setLeftAtTime(LocalDateTime.now());
+        personLeaving.setPositionInQueue(0L);
         personRepository.save(personLeaving);
 
         List<Person> personsToUpdate = personRepository.findAllByJoinedAtTimeAfterAndLeftAtTimeIsNull(personLeaving.getJoinedAtTime());
