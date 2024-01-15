@@ -27,7 +27,12 @@ public class ConversionService {
         dto.setPositionInQueue(person.getPositionInQueue());
         dto.setJoinedAtTime(person.getJoinedAtTime());
         dto.setLeftAtTime(person.getLeftAtTime());
-        dto.setQueueName(person.getQueue().getQueueName());
+
+        if (person.getQueue() != null) {
+        dto.setQueueName(person.getQueue().getQueueName());}
+        else {
+            dto.setQueueName("No connected Queue");
+        }
         return dto;
     }
 

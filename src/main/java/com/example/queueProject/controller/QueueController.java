@@ -2,7 +2,9 @@ package com.example.queueProject.controller;
 
 import com.example.queueProject.dto.QueueDetailDto;
 import com.example.queueProject.dto.QueueSummaryDto;
+import com.example.queueProject.entity.Person;
 import com.example.queueProject.entity.Queue;
+import com.example.queueProject.repository.PersonRepository;
 import com.example.queueProject.repository.QueueRepository;
 import com.example.queueProject.services.ConversionService;
 import jakarta.persistence.EntityNotFoundException;
@@ -21,10 +23,12 @@ public class QueueController {
 
     private final QueueRepository queueRepository;
     private final ConversionService conversionService;
+    private final PersonRepository personRepository;
 
-    public QueueController(QueueRepository queueRepository, ConversionService conversionService) {
+    public QueueController(QueueRepository queueRepository, ConversionService conversionService, PersonRepository personRepository) {
         this.queueRepository = queueRepository;
         this.conversionService = conversionService;
+        this.personRepository = personRepository;
     }
 
     @PostMapping
@@ -92,5 +96,18 @@ public class QueueController {
         else{
             return ResponseEntity.ok(queue.getQueueId());
         }
+    }
+
+    @DeleteMapping("/delete/{queueId}")
+    ResponseEntity<?> deleteQueue(@PathVariable Long queueId) {
+        Queue queue = queueRepository.findById(queueId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        List<Person> personsInQueue = queue.getPersons();
+        for (Person person : personsInQueue){
+            person.setQueue(null);
+            personRepository.save(person);
+        }
+        queueRepository.deleteById(queueId);
+        return ResponseEntity.ok().build();
     }
 }
