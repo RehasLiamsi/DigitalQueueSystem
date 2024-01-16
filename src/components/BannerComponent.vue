@@ -15,14 +15,6 @@ const fetchActiveQueueId = async () => {
   }
 }
 
-// const toggleQueueStatus = async () => {
-//   try {
-//     await axiosInstance.put(`queue/${activeQueueId.value}`);
-//   } catch (error) {
-//     console.error("There was an error toggling the queue status:", error);
-//   }location.reload();
-// }
-
 const toggleDropdown = () => {
   showDropdown.value = !showDropdown.value
 }
@@ -31,31 +23,28 @@ onMounted(fetchActiveQueueId);
 
 </script>
 <template>
-<div id="banner">
-<p>Welcome Admin!</p>
-<div class="router-links">
-  <RouterLink to="/admin">Home</RouterLink>
-  <div class="dropdown" @click="toggleDropdown">
-    <span class="dropdown-link">Settings</span>
-    <div v-if="showDropdown" class="dropdown-content">
-<!--      <div  v-if="activeQueueId != ''"  @click="toggleQueueStatus">Close queue</div>-->
-<!--      <div  v-else>-->
-        <RouterLink to="/queues">Queues</RouterLink></div>
-<!--    </div>-->
+  <div id="banner">
+    <p>Welcome Admin!</p>
+    <div class="router-links">
+      <RouterLink to="/admin">Home</RouterLink>
+      <div class="dropdown" @click="toggleDropdown">
+        <span class="dropdown-link">Settings</span>
+        <div v-if="showDropdown" class="dropdown-content">
+          <RouterLink to="/queues">Queues</RouterLink>
+        </div>
 
+
+      </div>
+
+      <RouterLink to="/logout">Logout</RouterLink>
+
+
+    </div>
   </div>
-
-  <!--      <RouterLink to="/settings">Settings</RouterLink>-->
-  <!--      <RouterLink to="/statistics">Statistics</RouterLink>-->
-  <RouterLink to="/logout">Logout</RouterLink>
-
-
-</div>
-</div>
 </template>
 
 <style scoped>
-#banner{
+#banner {
   background: #0167b2;
   padding: 0.4em 4em;
   color: white;
@@ -65,20 +54,21 @@ onMounted(fetchActiveQueueId);
   flex-wrap: wrap;
 }
 
-.router-links{
+.router-links {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
+
 .dropdown-link,
-.router-links a{
+.router-links a {
   text-decoration: none;
   color: white;
   cursor: pointer;
   margin: 10px;
 }
 
-.dropdown-link{
+.dropdown-link {
   display: inline-flex;
   margin-bottom: 0;
 }
@@ -90,20 +80,20 @@ onMounted(fetchActiveQueueId);
   position: absolute;
   background-color: #f9f9f9;
   color: black;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   padding: 0;
   margin-top: 0.5em;
   min-width: 100px;
   cursor: pointer;
 }
 
-.dropdown-content ul{
+.dropdown-content ul {
   list-style: none;
   margin: 0;
   padding: 0.5em 0 0.5em 1em;
 }
 
-.dropdown-content a{
+.dropdown-content a {
   padding: 0.2em;
   width: auto;
   text-decoration: none;
@@ -111,7 +101,7 @@ onMounted(fetchActiveQueueId);
 
 }
 
-p{
+p {
   margin-bottom: 0;
 }
 </style>

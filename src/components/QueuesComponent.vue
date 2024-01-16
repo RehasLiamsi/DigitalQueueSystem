@@ -42,8 +42,8 @@ const deleteQueue = async (queueId) => {
   }
 }
 
-const addQueue = async() => {
-  const details = { queueName: queueName.value, queueStatus: 0 };
+const addQueue = async () => {
+  const details = {queueName: queueName.value, queueStatus: 0};
   try {
     await axiosInstance.post('/queue', details);
     await fetchAllQueues();
@@ -53,14 +53,9 @@ const addQueue = async() => {
 }
 
 onMounted(fetchAllQueues);
-//setInterval(fetchAllQueues,1000);
 </script>
 <template>
   <BannerComponent/>
-  <!--  <ul v-for="queue in queues" :key="queue">-->
-  <!--    <li>{{queue.queueName}}</li>-->
-  <!--    <li>{{queue.queueStatus}}</li>-->
-  <!--  </ul>-->
   <div class="m-5">
     <table class="table table-hover table-bordered ">
       <thead>
@@ -88,11 +83,6 @@ onMounted(fetchAllQueues);
         <td>
           <input type="text" id="queueName" v-model="queueName" required placeholder="Queue Name">
         </td>
-<!--        <td>-->
-<!--          <button type="button" class="btn btn-outline-primary btn-sm" @click="toggleStatus(queue.queueId)">-->
-<!--            {{ getStatusText(queue.queueStatus) }}-->
-<!--          </button>-->
-<!--        </td>-->
         <td>
           <button type="button" class="btn btn-outline-primary btn-sm" @click="addQueue()">Add Queue
           </button>
