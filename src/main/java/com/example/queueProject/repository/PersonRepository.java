@@ -26,8 +26,6 @@ public interface PersonRepository extends ListCrudRepository<Person, Long> {
     Long countByQueueQueueId(Long queueId);
 
     Long countByQueueQueueIdAndJoinedAtTimeBetween(Long queueId, LocalDateTime startOfDay, LocalDateTime endOfDay);
-    //Long countByJoinedAtTimeBetween(LocalDateTime startOfDay, LocalDateTime endOfDay);
-
 
     List<Person> findAllByJoinedAtTimeAfterAndLeftAtTimeIsNull(LocalDateTime joinedAtTime);
 
