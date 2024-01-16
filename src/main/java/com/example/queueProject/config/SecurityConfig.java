@@ -29,10 +29,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers("/person/**").permitAll()
                         .requestMatchers("/queue/active/id").permitAll()
-                        // Add more patterns as needed
                         .anyRequest().authenticated()
                 ))
-                //.requestMatchers("/api/v1/auth/**").permitAll().anyRequest().authenticated().and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
