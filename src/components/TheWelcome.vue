@@ -13,9 +13,7 @@ const fetchActiveQueueId = async () => {
   try {
     const response = await axiosInstance.get(`/queue/active/id`)
     activeQueueId.value = response.data;
-    console.log('(fetchActiveQueueId) Active queue id is:', activeQueueId.value)
   } catch (error) {
-    console.error('(fetchActiveQueueId) Error fetching active queue id:', error);
     await router.push('/noActiveQueue');
   }
 }
@@ -25,10 +23,9 @@ const addPersonToQueue = async () => {
     person.value = response.data;
     sessionStorage.setItem('person', JSON.stringify(response.data))
     sessionStorage.setItem('joinedQueue', 'true');
-    console.log("(addPersonToQueue) Person added to queue")
     await fetchQueuePosition();
   } catch (error) {
-    console.error("(addPersonToQueue) Error adding person to queue:", error);
+    window.alert("Error joining queue!")
   }
 }
 
@@ -37,8 +34,7 @@ const fetchQueuePosition = async () => {
     const response = await axiosInstance.get(`/person/${person.value.personId}/position`);
     positionInQueue.value = response.data;
   } catch (error) {
-    console.log("(fetchQueuePosition) Person ID: ", person.value.personId)
-    console.error("(fetchQueuePosition) Error fetching queue position:", error);
+    window.alert("OOPS! Couldn't fetch position in queue")
   }
 }
 
@@ -52,20 +48,18 @@ const leaveQueue = async () => {
     clearInterval();
     await router.push('/leftQueue')
   } catch (error) {
-    console.error("(leaveQueue) Error leaving the queue:", error);
-  }
+    window.alert("OOPS! Couldn't leave queue")  }
 
 }
 
 const conditionalAdditionOfPerson = () => {
   const storedPerson = sessionStorage.getItem('person');
   if (storedPerson) {
-    console.log('(conditionalAdditionOfPerson) Person already in session storage')
+    window.alert("You are already in queue")
     person.value = JSON.parse(storedPerson);
     sessionStorage.setItem('joinedQueue', 'true');
     fetchQueuePosition();
   } else {
-    console.log("(conditionalAdditionOfPerson) Adding person to queue")
     addPersonToQueue();
   }
 }
