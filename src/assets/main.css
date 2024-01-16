@@ -1,0 +1,42 @@
+body{
+    margin:0;
+    font-family: Tahoma, sans-serif;
+
+}
+
+p{
+    font-size: 1.5em;
+    margin: 0.5em;
+}
+#logo{
+    height: 9em;
+}
+
+.text-box{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#arrow{
+    display: block;
+    width: 70%;
+    margin: 2em auto;
+}
+
+button {
+    background: #0167b2;
+    color: white;
+    font-size: larger;
+    border-radius: 0.3em;
+    border-style: none;
+    padding: 0.5em 5em;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 2em;
+}
+
+.centre{
+   margin: 3em;
+}

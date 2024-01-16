@@ -1,5 +1,5 @@
 <script setup></script>
-<template><div>
+<template><p class="centre">
   Du har hoppat av kön. Skanna QR koden för att joina igen, eller stäng ner fliken.
-</div></template>
+</p></template>
 <style scoped></style>

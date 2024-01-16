@@ -1,7 +1,7 @@
 <script setup></script>
 
 <template><div>
-<img src="../assets/HumanityFirst.jpg" alt="Humanity first logo">
+<img id="logo" src="../assets/HumanityFirst.jpg" alt="Humanity first logo">
 </div></template>
 
 <style scoped>

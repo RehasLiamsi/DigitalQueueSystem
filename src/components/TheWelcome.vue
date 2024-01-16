@@ -4,7 +4,7 @@ import {useRouter} from "vue-router";
 import axiosInstance from "@/axiosConfig.js";
 
 const person = ref('');
-const hasJoinedQueue = ref(sessionStorage.getItem('joinedQueue') === 'true');
+//const hasJoinedQueue = ref(sessionStorage.getItem('joinedQueue') === 'true');
 const router = useRouter();
 const positionInQueue = ref('');
 const activeQueueId = ref('');
@@ -91,8 +91,8 @@ onUnmounted(() => {
 <template>
   <div class="text-box">
 <!--    <div v-if ="hasJoinedQueue">-->
-    <p>Din plats i kön är <span> {{ positionInQueue }}</span></p>
-      <button @click="leaveQueue()">Hoppa av kön</button>
+    <p>Din plats i kön är: </p><p>{{ positionInQueue }}</p>
+
 <!--    </div>-->
 <!--    <div v-else>-->
 <!--    <p>Tryck på knappen nedan för att ställa dig i kön</p>-->
@@ -100,5 +100,5 @@ onUnmounted(() => {
 <!--   <p>Din plats i kön är <span> {{ positionInQueue }}</span></p>-->
 <!--  </div>-->
   </div>
-  <img src="../assets/360_F_543201527_CKqnLxlnnMjYJVLHDk6l69gzQwSfVh8X.jpg" alt="spinning arrow"/>
-</template>
+  <img id="arrow" src="../assets/360_F_543201527_CKqnLxlnnMjYJVLHDk6l69gzQwSfVh8X.jpg" alt="spinning arrow"/>
+  <button @click="leaveQueue()">Hoppa av kön</button></template>
