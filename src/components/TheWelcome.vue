@@ -4,7 +4,6 @@ import {useRouter} from "vue-router";
 import axiosInstance from "@/axiosConfig.js";
 
 const person = ref('');
-//const hasJoinedQueue = ref(sessionStorage.getItem('joinedQueue') === 'true');
 const router = useRouter();
 const positionInQueue = ref('');
 const activeQueueId = ref('');
@@ -21,23 +20,17 @@ const fetchActiveQueueId = async () => {
   }
 }
 const addPersonToQueue = async () => {
-  //if (!sessionStorage.getItem('joinedQueue')) {
-    try {
-      const response = await axiosInstance.post(`/person/add/${activeQueueId.value}`);
-      person.value = response.data;
-      sessionStorage.setItem('person', JSON.stringify(response.data))
-      sessionStorage.setItem('joinedQueue', 'true');
-      console.log("(addPersonToQueue) Person added to queue")
-      await fetchQueuePosition();
-    } catch (error) {
-      console.error("(addPersonToQueue) Error adding person to queue:", error);
-    }
-  } //else {
-    //console.log('Already joined the queue', person.value.personId)
-    //const storedPerson = sessionStorage.getItem('person');
-    //person.value = JSON.parse(storedPerson);
-  //}
-//
+  try {
+    const response = await axiosInstance.post(`/person/add/${activeQueueId.value}`);
+    person.value = response.data;
+    sessionStorage.setItem('person', JSON.stringify(response.data))
+    sessionStorage.setItem('joinedQueue', 'true');
+    console.log("(addPersonToQueue) Person added to queue")
+    await fetchQueuePosition();
+  } catch (error) {
+    console.error("(addPersonToQueue) Error adding person to queue:", error);
+  }
+}
 
 const fetchQueuePosition = async () => {
   try {
@@ -77,7 +70,7 @@ const conditionalAdditionOfPerson = () => {
   }
 }
 
-const fetchData = async () =>{
+const fetchData = async () => {
   await fetchActiveQueueId();
   await conditionalAdditionOfPerson();
   setInterval(fetchQueuePosition, 5000);
@@ -91,15 +84,9 @@ onUnmounted(() => {
 
 <template>
   <div class="text-box">
-<!--    <div v-if ="hasJoinedQueue">-->
-    <p>Din plats i kön är: </p><p>{{ positionInQueue }}</p>
-
-<!--    </div>-->
-<!--    <div v-else>-->
-<!--    <p>Tryck på knappen nedan för att ställa dig i kön</p>-->
-<!--      <button @click="conditionalAdditionOfPerson()">Ställ dig i kön</button>-->
-<!--   <p>Din plats i kön är <span> {{ positionInQueue }}</span></p>-->
-<!--  </div>-->
+    <p>Din plats i kön är: </p>
+    <p>{{ positionInQueue }}</p>
   </div>
   <img id="arrow" src="../assets/360_F_543201527_CKqnLxlnnMjYJVLHDk6l69gzQwSfVh8X.jpg" alt="spinning arrow"/>
-  <button @click="leaveQueue()">Hoppa av kön</button></template>
+  <button @click="leaveQueue()">Hoppa av kön</button>
+</template>
