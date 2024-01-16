@@ -13,7 +13,7 @@ const fetchAllQueues = async () => {
     const response = await axiosInstance.get('queue');
     queues.value = response.data;
   } catch (error) {
-    console.log("Error fetching all queues:", error);
+    window.alert("Error fetching queues!");
   }
 }
 
@@ -26,7 +26,7 @@ const toggleStatus = async (queueId) => {
     await axiosInstance.put(`queue/${queueId}`);
     await fetchAllQueues();
   } catch (error) {
-    console.log("Error changing queue status:", error);
+    window.alert("Error toggling queue status!")
   }
 }
 
@@ -37,7 +37,7 @@ const deleteQueue = async (queueId) => {
       await axiosInstance.delete(`queue/delete/${queueId}`);
       await fetchAllQueues();
     } catch (error) {
-      console.log("Error deleting queue", error)
+      window.alert("OOPS! Error deleting queue.")
     }
   }
 }
@@ -48,7 +48,7 @@ const addQueue = async () => {
     await axiosInstance.post('/queue', details);
     await fetchAllQueues();
   } catch (error) {
-    console.error('Error adding Queue', error);
+    window.alert("Error adding queue!")
   }
 }
 

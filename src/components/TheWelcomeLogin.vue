@@ -15,12 +15,10 @@ const storeToken = (token) => {
 const login = async (credentials) => {
   try {
     const response = await axiosInstance.post('/api/v1/auth/authenticate', credentials);
-    console.log(response.data);
     await router.push('/admin');
     const token = response.data.token;
     return token;
   } catch (error) {
-    console.error('Login error', error);
     alert('Login failed!');
     throw error;
   }
@@ -31,10 +29,8 @@ const handleLogin = async () => {
   try {
     const token = await login(credentials);
     storeToken(token);
-    console.log('Logged in and token stored');
-    console.log("Stored Token: ", Cookies.get('jwtToken'));
   } catch (error) {
-    console.error('Login failed', error);
+    alert("Error logging in!")
   }
 };
 </script>

@@ -16,8 +16,7 @@ const fetchPeopleCount = async () => {
     const response = await axiosInstance.get('/person/count/activeQueue');
     peopleCount.value = response.data;
   } catch (error) {
-    console.log("Stored Token: ", Cookies.get('jwtToken'));
-    console.error("There was an error fetching the entries count:", error);
+    alert("Error fetching count of people!")
   }
 };
 
@@ -26,8 +25,8 @@ const fetchActiveQueueName = async () => {
     const response = await axiosInstance.get('/queue/active/name');
     activeQueueName.value = response.data;
   } catch (error) {
-    console.log("Stored Token: ", Cookies.get('jwtToken'));
-    console.error("There was an error fetching the active queue:", error);
+    alert("Error fetching name of active queue!")
+
   }
 }
 
@@ -45,8 +44,7 @@ const fetchTotalPeopleServedToday = async () => {
     const response = await axiosInstance.get(`/person/count/all/${activeQueueId.value}`);
     totalPeopleServed.value = response.data;
   } catch (error) {
-    console.log("Active queue Id not being fetched: ", activeQueueId.value)
-    console.error("Error fetching total people served since start")
+  alert("Error fetching total people served today!")
   }
 }
 
@@ -63,7 +61,7 @@ const dropFirstPersonInQueue = async () => {
   try {
     await axiosInstance.put(`person/left/${firstPersonInQueue.value.personId}`)
   } catch (error) {
-    console.error("Error dropping first person from queue:", error);
+    alert("OOPS! Couldn't go to next person in queue!")
   }
 }
 

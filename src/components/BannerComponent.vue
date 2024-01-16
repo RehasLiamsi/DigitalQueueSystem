@@ -22,6 +22,7 @@ const toggleDropdown = () => {
 onMounted(fetchActiveQueueId);
 
 </script>
+
 <template>
   <div id="banner">
     <p>Welcome Admin!</p>
@@ -32,13 +33,8 @@ onMounted(fetchActiveQueueId);
         <div v-if="showDropdown" class="dropdown-content">
           <RouterLink to="/queues">Queues</RouterLink>
         </div>
-
-
       </div>
-
       <RouterLink to="/logout">Logout</RouterLink>
-
-
     </div>
   </div>
 </template>
@@ -98,7 +94,6 @@ onMounted(fetchActiveQueueId);
   width: auto;
   text-decoration: none;
   color: black;
-
 }
 
 p {
