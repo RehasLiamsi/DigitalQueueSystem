@@ -59,24 +59,6 @@ public class PersonController {
 
     }
 
-    /*@PostMapping
-    ResponseEntity<PersonInputDetailDto> addPerson(@RequestBody PersonInputDetailDto personInputDetailDto) {
-        personInputDetailDto.setJoinedAtTime(LocalDateTime.now());
-        var queue = queueRepository.getQueueByQueueId(personInputDetailDto.getQueueId());
-        if (queue.getQueueStatus()) {
-            Person person = conversionService.convertToPersonEntity(personInputDetailDto);
-            Long currentPositionInQueue = personRepository.countByQueueQueueIdAndLeftAtTimeIsNull(queue.getQueueId());
-            person.setPositionInQueue((currentPositionInQueue + 1));
-            personRepository.save(person);
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE);
-        }
-
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-                .buildAndExpand(personInputDetailDto.getPersonId()).toUri();
-        return ResponseEntity.created(location).build();
-    }*/
-
     @PutMapping("/update/{id}")
     ResponseEntity<PersonOutputDetailDto> updatePositionInQueue(@PathVariable Long id) {
         Person personToUpdate = personRepository.findById(id)
