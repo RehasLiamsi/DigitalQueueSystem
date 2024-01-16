@@ -17,6 +17,7 @@ const fetchActiveQueueId = async () => {
     console.log('(fetchActiveQueueId) Active queue id is:', activeQueueId.value)
   } catch (error) {
     console.error('(fetchActiveQueueId) Error fetching active queue id:', error);
+    await router.push('/noActiveQueue');
   }
 }
 const addPersonToQueue = async () => {
