@@ -32,6 +32,7 @@ onMounted(fetchActiveQueueId);
         <span class="dropdown-link">Settings</span>
         <div v-if="showDropdown" class="dropdown-content">
           <RouterLink to="/queues">Queues</RouterLink>
+          <RouterLink to="/addNewAdmin">Add new Admin</RouterLink>
         </div>
       </div>
       <RouterLink to="/logout">Logout</RouterLink>

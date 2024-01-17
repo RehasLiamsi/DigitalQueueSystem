@@ -20,6 +20,11 @@ const router = createRouter({
       component: () => import('../views/QueuesView.vue')
     },
     {
+      path: '/addNewAdmin',
+      name: 'addNewAdmin',
+      component: () => import('../views/AddNewAdmin.vue')
+    },
+    {
       path: '/logout',
       name: 'logout',
       // route level code-splitting
