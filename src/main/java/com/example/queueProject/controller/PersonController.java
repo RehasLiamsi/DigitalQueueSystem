@@ -74,9 +74,7 @@ public class PersonController {
         Person personLeaving = personRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        personLeaving.setLeftAtTime(LocalDateTime.now());
-        personLeaving.setPositionInQueue(0L);
-        personRepository.save(personLeaving);
+        personLeavesQueue(personLeaving);
 
         List<Person> personsToUpdate = personRepository.findAllByJoinedAtTimeAfterAndLeftAtTimeIsNull(personLeaving.getJoinedAtTime());
         for (Person person : personsToUpdate) {
@@ -90,8 +88,7 @@ public class PersonController {
     ResponseEntity<PersonOutputDetailDto> dropAllPersonsFromQueue(@PathVariable String queueName) {
         List<Person> allActivePersonsInQueue = personRepository.findAllByQueue_QueueNameAndLeftAtTimeIsNull(queueName);
         for (Person person : allActivePersonsInQueue) {
-            person.setLeftAtTime(LocalDateTime.now());
-            personRepository.save(person);
+            personLeavesQueue(person);
         }
         return ResponseEntity.ok().build();
     }
@@ -172,5 +169,11 @@ public class PersonController {
         Long oldPosition = person.getPositionInQueue();
         person.setPositionInQueue(--oldPosition);
         personRepository.save(person);
+    }
+
+    private void personLeavesQueue(Person personLeaving) {
+        personLeaving.setLeftAtTime(LocalDateTime.now());
+        personLeaving.setPositionInQueue(0L);
+        personRepository.save(personLeaving);
     }
 }
