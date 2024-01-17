@@ -2,7 +2,6 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import axiosInstance from "../axiosConfig";
 import {onMounted, ref} from "vue";
-import Cookies from "js-cookie";
 import BannerComponent from "@/components/BannerComponent.vue";
 
 const peopleCount = ref('');
@@ -12,49 +11,28 @@ const totalPeopleServed = ref('');
 const firstPersonInQueue = ref('');
 
 const fetchPeopleCount = async () => {
-  try {
-    const response = await axiosInstance.get('/person/count/activeQueue');
-    peopleCount.value = response.data;
-  } catch (error) {
-    alert("Error fetching count of people!")
-  }
+  const response = await axiosInstance.get('/person/count/activeQueue');
+  peopleCount.value = response.data;
 };
 
 const fetchActiveQueueName = async () => {
-  try {
-    const response = await axiosInstance.get('/queue/active/name');
-    activeQueueName.value = response.data;
-  } catch (error) {
-    alert("Error fetching name of active queue!")
-
-  }
+  const response = await axiosInstance.get('/queue/active/name');
+  activeQueueName.value = response.data;
 }
 
 const fetchActiveQueueId = async () => {
-  try {
-    const response = await axiosInstance.get('/queue/active/id');
-    activeQueueId.value = response.data;
-  } catch (error) {
-    console.error("Error fetching active queue ID:", error);
-  }
+  const response = await axiosInstance.get('/queue/active/id');
+  activeQueueId.value = response.data;
 }
 
 const fetchTotalPeopleServedToday = async () => {
-  try {
-    const response = await axiosInstance.get(`/person/count/all/${activeQueueId.value}`);
-    totalPeopleServed.value = response.data;
-  } catch (error) {
-  alert("Error fetching total people served today!")
-  }
+  const response = await axiosInstance.get(`/person/count/all/${activeQueueId.value}`);
+  totalPeopleServed.value = response.data;
 }
 
 const fetchFirstPersonInQueue = async () => {
-  try {
-    const response = await axiosInstance.get(`/person/activeQueue/first`);
-    firstPersonInQueue.value = response.data;
-  } catch (error) {
-    console.error("Error fetching first person in queue:", error)
-  }
+  const response = await axiosInstance.get(`/person/activeQueue/first`);
+  firstPersonInQueue.value = response.data;
 }
 
 const dropFirstPersonInQueue = async () => {
@@ -62,6 +40,7 @@ const dropFirstPersonInQueue = async () => {
     await axiosInstance.put(`person/left/${firstPersonInQueue.value.personId}`)
   } catch (error) {
     alert("OOPS! Couldn't go to next person in queue!")
+    console.error(error)
   }
 }
 
@@ -81,14 +60,17 @@ setInterval(fetchData, 3000);
   <BannerComponent/>
 
   <div class="text-box">
-    <p v-if="activeQueueName===''"> No queue is active.</p>
-    <p v-else>The active queue is "<span> {{ activeQueueName }}</span>"
-      <br><br>There are <span> {{ peopleCount }} </span> people standing in this queue.
-      <br><br>Total number of people served today is : <span> {{ totalPeopleServed }}</span></p>
-
-    <button type="button" @click="dropFirstPersonInQueue()">
-      Go to next person in Queue
-    </button>
+    <div v-if="activeQueueName===''">
+      <p> No queue is active.</p>
+    </div>
+    <div v-else>
+      <p>The active queue is "<span> {{ activeQueueName }}</span>"
+        <br><br>There are <span> {{ peopleCount }} </span> people standing in this queue.
+        <br><br>Total number of people served today is : <span> {{ totalPeopleServed }}</span></p>
+      <button type="button" @click="dropFirstPersonInQueue()">
+        Go to next person in Queue
+      </button>
+    </div>
   </div>
 </template>
 
