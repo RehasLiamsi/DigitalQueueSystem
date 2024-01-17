@@ -78,23 +78,19 @@ onMounted(fetchActiveQueueId);
   background-color: #f9f9f9;
   color: black;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-  padding: 0;
+  padding: 0.5em 1em 0.5em 0;
   margin-top: 0.5em;
-  min-width: 100px;
+  min-width: 150px;
   cursor: pointer;
 }
 
-.dropdown-content ul {
-  list-style: none;
-  margin: 0;
-  padding: 0.5em 0 0.5em 1em;
-}
-
 .dropdown-content a {
-  padding: 0.2em;
+  padding: 0 1em;
   width: auto;
   text-decoration: none;
   color: black;
+  font-size: 0.9em;
+  margin: 0.3em 0;
 }
 
 p {
