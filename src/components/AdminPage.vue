@@ -36,6 +36,7 @@ const fetchFirstPersonInQueue = async () => {
 }
 
 const dropFirstPersonInQueue = async () => {
+  await fetchFirstPersonInQueue();
   try {
     await axiosInstance.put(`person/left/${firstPersonInQueue.value.personId}`)
   } catch (error) {
@@ -49,7 +50,6 @@ const fetchData = async () => {
   await fetchActiveQueueName();
   await fetchPeopleCount();
   await fetchTotalPeopleServedToday();
-  await fetchFirstPersonInQueue();
 }
 
 onMounted(fetchData);
