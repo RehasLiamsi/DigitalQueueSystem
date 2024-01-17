@@ -9,25 +9,22 @@ const fields = ['Queue Name', 'Queue Status'];
 const queueName = ref('');
 
 const fetchAllQueues = async () => {
-  try {
-    const response = await axiosInstance.get('queue');
-    queues.value = response.data;
-  } catch (error) {
-    window.alert("Error fetching queues!");
-  }
+  const response = await axiosInstance.get('queue');
+  queues.value = response.data;
 }
 
 const getStatusText = (status) => {
   return status ? 'Active' : 'Inactive';
 };
 
-const toggleStatus = async (queueId) => {
-  try {
-    await axiosInstance.put(`queue/${queueId}`);
-    await fetchAllQueues();
-  } catch (error) {
-    window.alert("Error toggling queue status!")
-  }
+const dropAllPersonsFromQueue = async (queueName) => {
+  await axiosInstance.put(`person/left/all/${queueName}`)
+}
+
+const toggleStatus = async (queueName, queueId) => {
+  await dropAllPersonsFromQueue(queueName);
+  await axiosInstance.put(`queue/${queueId}`);
+  await fetchAllQueues();
 }
 
 const deleteQueue = async (queueId) => {
@@ -69,7 +66,7 @@ onMounted(fetchAllQueues);
       <tr v-for="queue in queues" :key="queue">
         <td>{{ queue.queueName }}</td>
         <td>
-          <button type="button" class="btn btn-outline-primary btn-sm" @click="toggleStatus(queue.queueId)">
+          <button type="button" class="btn btn-outline-primary btn-sm" @click="toggleStatus(queue.queueName, queue.queueId)">
             {{ getStatusText(queue.queueStatus) }}
           </button>
         </td>
