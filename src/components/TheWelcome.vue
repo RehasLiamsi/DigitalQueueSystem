@@ -18,24 +18,16 @@ const fetchActiveQueueId = async () => {
   }
 }
 const addPersonToQueue = async () => {
-  try {
     const response = await axiosInstance.post(`/person/add/${activeQueueId.value}`);
     person.value = response.data;
     sessionStorage.setItem('person', JSON.stringify(response.data))
     sessionStorage.setItem('joinedQueue', 'true');
     await fetchQueuePosition();
-  } catch (error) {
-    window.alert("Error joining queue!")
-  }
 }
 
 const fetchQueuePosition = async () => {
-  try {
     const response = await axiosInstance.get(`/person/${person.value.personId}/position`);
     positionInQueue.value = response.data;
-  } catch (error) {
-    window.alert("OOPS! Couldn't fetch position in queue")
-  }
 }
 
 
@@ -55,7 +47,6 @@ const leaveQueue = async () => {
 const conditionalAdditionOfPerson = () => {
   const storedPerson = sessionStorage.getItem('person');
   if (storedPerson) {
-    window.alert("You are already in queue")
     person.value = JSON.parse(storedPerson);
     sessionStorage.setItem('joinedQueue', 'true');
     fetchQueuePosition();
@@ -67,9 +58,9 @@ const conditionalAdditionOfPerson = () => {
 const fetchData = async () => {
   await fetchActiveQueueId();
   await conditionalAdditionOfPerson();
-  setInterval(fetchQueuePosition, 5000);
 }
 onMounted(fetchData);
+setInterval(fetchQueuePosition, 5000);
 onUnmounted(() => {
   clearInterval();
 })
