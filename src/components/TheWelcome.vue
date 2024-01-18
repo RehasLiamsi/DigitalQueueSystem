@@ -75,3 +75,19 @@ onUnmounted(() => {
   <img id="arrow" src="../assets/360_F_543201527_CKqnLxlnnMjYJVLHDk6l69gzQwSfVh8X.jpg" alt="spinning arrow"/>
   <button @click="leaveQueue()">Hoppa av kön</button>
 </template>
+
+<style scoped>
+#arrow{
+  border-radius: 70%;
+  animation: rotation 10s linear infinite;
+}
+
+@keyframes rotation {
+  0%, 30%{
+    transform: rotate(0deg);
+  }
+  50%, 100%{
+    transform: rotate(360deg);
+  }
+}
+</style>
