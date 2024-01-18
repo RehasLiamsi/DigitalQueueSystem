@@ -8,7 +8,6 @@ const router = useRouter();
 const positionInQueue = ref('');
 const activeQueueId = ref('');
 
-
 const fetchActiveQueueId = async () => {
   try {
     const response = await axiosInstance.get(`/queue/active/id`)
@@ -17,6 +16,7 @@ const fetchActiveQueueId = async () => {
     await router.push('/noActiveQueue');
   }
 }
+
 const addPersonToQueue = async () => {
     const response = await axiosInstance.post(`/person/add/${activeQueueId.value}`);
     person.value = response.data;
@@ -30,7 +30,6 @@ const fetchQueuePosition = async () => {
     positionInQueue.value = response.data;
 }
 
-
 const leaveQueue = async () => {
   try {
     await axiosInstance.put(`/person/left/${person.value.personId}`);
@@ -41,7 +40,6 @@ const leaveQueue = async () => {
     await router.push('/leftQueue')
   } catch (error) {
     window.alert("OOPS! Couldn't leave queue")  }
-
 }
 
 const conditionalAdditionOfPerson = () => {
@@ -59,6 +57,7 @@ const fetchData = async () => {
   await fetchActiveQueueId();
   await conditionalAdditionOfPerson();
 }
+
 onMounted(fetchData);
 setInterval(fetchQueuePosition, 5000);
 onUnmounted(() => {
@@ -73,6 +72,10 @@ onUnmounted(() => {
     <p>{{ positionInQueue }}</p>
   </div>
   <img id="arrow" src="../assets/360_F_543201527_CKqnLxlnnMjYJVLHDk6l69gzQwSfVh8X.jpg" alt="spinning arrow"/>
+  <div class="text-box">
+  <p>Din väntetid är ungefär</p>
+  <p>{{positionInQueue * 5}} min</p>
+  </div>
   <button @click="leaveQueue()">Hoppa av kön</button>
 </template>
 
