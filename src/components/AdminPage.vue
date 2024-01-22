@@ -9,10 +9,13 @@ const activeQueueName = ref('');
 const activeQueueId = ref('');
 const totalPeopleServed = ref('');
 const firstPersonInQueue = ref('');
+const buttonText = ref('Close Queue');
 
 const fetchPeopleCount = async () => {
-  const response = await axiosInstance.get('/person/count/activeQueue');
-  peopleCount.value = response.data;
+  if (activeQueueId.value) {
+    const response = await axiosInstance.get('/person/count/activeQueue');
+    peopleCount.value = response.data;
+  }
 };
 
 const fetchActiveQueueName = async () => {
@@ -45,15 +48,30 @@ const dropFirstPersonInQueue = async () => {
   }
 }
 
-const fetchData = async () => {
-  await fetchActiveQueueId();
+const closeQueue = async () => {
+  buttonText.value = buttonText.value === 'Close Queue' ? 'Open Queue' : 'Close Queue'
+  try {
+    await axiosInstance.put(`queue/${activeQueueId.value}`);
+  } catch (error) {
+    alert("OOPS! Couldn't close queue!")
+  }
+}
+
+const fetchDataOnMounted = async () => {
   await fetchActiveQueueName();
-  await fetchPeopleCount();
+  await fetchAllData();
+}
+
+const fetchAllData = async () => {
+  await fetchActiveQueueId();
+  if (activeQueueId.value) {
+    await fetchPeopleCount();
+  }
   await fetchTotalPeopleServedToday();
 }
 
-onMounted(fetchData);
-setInterval(fetchData, 3000);
+onMounted(fetchDataOnMounted);
+setInterval(fetchAllData, 3000);
 </script>
 
 <template>
@@ -69,6 +87,10 @@ setInterval(fetchData, 3000);
         <br><br>Total number of people served today is : <span> {{ totalPeopleServed }}</span></p>
       <button type="button" @click="dropFirstPersonInQueue()">
         Go to next person in Queue
+      </button>
+      <br>
+      <button type="button" @click="closeQueue()">
+        {{ buttonText }}
       </button>
     </div>
   </div>
