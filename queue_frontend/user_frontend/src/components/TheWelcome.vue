@@ -31,15 +31,19 @@ const fetchQueuePosition = async () => {
 }
 
 const leaveQueue = async () => {
-  try {
-    await axiosInstance.put(`/person/left/${person.value.personId}`);
-    sessionStorage.removeItem('joinedQueue');
-    sessionStorage.removeItem('person');
-    person.value = {};
-    clearInterval();
-    await router.push('/leftQueue')
-  } catch (error) {
-    window.alert("OOPS! Couldn't leave queue")  }
+  const confirmed = window.confirm("Är du säker att du vill hoppa av kön?")
+  if (confirmed) {
+    try {
+      await axiosInstance.put(`/person/left/${person.value.personId}`);
+      sessionStorage.removeItem('joinedQueue');
+      sessionStorage.removeItem('person');
+      person.value = {};
+      clearInterval();
+      await router.push('/leftQueue')
+    } catch (error) {
+      window.alert("OOPS! Det gick inte att hoppa av kön")
+    }
+  }
 }
 
 const conditionalAdditionOfPerson = () => {
