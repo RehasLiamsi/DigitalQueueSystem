@@ -115,11 +115,11 @@ public class PersonController {
         return conversionService.convertToPersonOutputDetailDto(person);
     }
 
-    @GetMapping("/activeQueue/first")
-    ResponseEntity<PersonOutputDetailDto> getFirstPersonInActiveQueue() {
-        Boolean queueStatus = true;
+    @GetMapping("/queue/{activeQueueId}/first")
+    ResponseEntity<PersonOutputDetailDto> getFirstPersonInActiveQueue(@PathVariable Long activeQueueId) {
         Long positionInQueue = 1L;
-        Person person = personRepository.findByQueue_QueueStatusAndPositionInQueue(queueStatus, positionInQueue);
+        Person person = personRepository.findByQueue_QueueIdAndPositionInQueue(activeQueueId, positionInQueue)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         return ResponseEntity.ok(conversionService.convertToPersonOutputDetailDto(person));
     }
 
@@ -143,10 +143,9 @@ public class PersonController {
         return personRepository.countBy();
     }
 
-    @GetMapping("/count/activeQueue")
-    Long getCountOfPersonsInActiveQueue() {
-        Boolean status = true;
-        return personRepository.countByQueue_QueueStatusAndLeftAtTimeIsNull(status);
+    @GetMapping("/count/{activeQueueId}")
+    Long getCountOfPersonsInActiveQueue(@PathVariable Long activeQueueId) {
+        return personRepository.countByQueueQueueIdAndLeftAtTimeIsNull(activeQueueId);
     }
 
     @GetMapping("/count/all/{queueId}")
