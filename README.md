@@ -1,71 +1,119 @@
 # Digital Queue System
 
-The **Digital Queue System** is a real-time queue management application designed to streamline customer service operations.
-Users can join queues via QR code scans or direct links, monitor their position in real-time, and exit queues when needed.
-Administrators have full control over queue operations, including activation and closure, ensuring efficient service management.
+The **Digital Queue System** is a full-stack, real-time queue management application that simplifies queue operations for both users and administrators. It provides a seamless interface for users to join queues via QR codes or direct links, while administrators can manage queues efficiently through a dedicated admin panel.
 
-## Features
+---
 
-- **User-Friendly Queue Entry**: Join queues effortlessly through QR codes or direct links.
-- **Real-Time Updates**: Monitor your position in the queue with live updates.
-- **Easy Exit**: Leave the queue at any time with a simple action.
-- **Administrative Control**: Admins can activate or deactivate queues in real-time.
-- **Responsive Design**: Optimized for various devices to ensure accessibility.
+## 🧰 Tech Stack
 
-## Tech Stack
+### Backend
+- Java 11+
+- Spring Boot
+- Spring Security with JWT Authentication
+- RESTful API
+- Maven
 
-- **Backend**: Java with Spring Boot
-- **Frontend**: Vue.js
-- **Languages**: Java, JavaScript, HTML, CSS
+### Frontend
+- Vue.js (separate interfaces for User and Admin)
+- HTML/CSS/JavaScript
 
-## Getting Started
+---
+
+## 📁 Project Structure
+
+```
+DigitalQueueSystem/
+├── queue_backend/
+│   └── springboot_project/       # Spring Boot backend
+├── queue_frontend/
+│   ├── admin_frontend/           # Admin Vue frontend
+│   └── user_frontend/            # User Vue frontend
+├── README.md
+└── LICENSE
+```
+
+---
+
+## 🚀 Features
+
+### User Frontend
+- Join queue via QR code or link
+- View real-time queue position
+- Leave queue with one click
+
+### Admin Frontend
+- View real-time queue list
+- Manage queue flow (open/close queues)
+- Access user statistics
+
+### Backend
+- Secure API with JWT-based authentication
+- Modular architecture: controllers, services, configs
+- Configurable security settings
+
+---
+
+## 🛠️ Getting Started
 
 ### Prerequisites
-
-- Java 11 or higher
+- Java 11+
 - Node.js and npm
-- Vue CLI (for frontend development)
+- Vue CLI
+- Docker (optional for deployment)
 
 ### Installation
 
-1. **Clone the Repository**:
-   ```bash
-   git clone https://github.com/RehasLiamsi/DigitalQueueSystem.git
-   cd DigitalQueueSystem
-   ```
+#### 1. Clone the Repository
+```bash
+git clone https://github.com/RehasLiamsi/DigitalQueueSystem.git
+cd DigitalQueueSystem
+```
 
-2. **Backend Setup**:
-   - Navigate to the backend directory:
-     ```bash
-     cd queue_backend/springboot_project
-     ```
-   - Build and run the Spring Boot application:
-     ```bash
-     ./mvnw spring-boot:run
-     ```
+#### 2. Start Backend
+```bash
+cd queue_backend/springboot_project
+./mvnw spring-boot:run
+```
 
-3. **Frontend Setup**:
-   - Navigate to the frontend directory:
-     ```bash
-     cd queue_frontend
-     ```
-   - Install dependencies:
-     ```bash
-     npm install
-     ```
-   - Run the development server:
-     ```bash
-     npm run serve
-     ```
+#### 3. Start Frontend (User/Admin)
+```bash
+# For User Frontend
+cd ../../queue_frontend/user_frontend
+npm install
+npm run serve
 
-4. **Access the Application**:
-   - Frontend: `http://localhost:8080/`
-   - Backend API: `http://localhost:8081/`
+# For Admin Frontend
+cd ../../queue_frontend/admin_frontend
+npm install
+npm run serve
+```
 
-## Contributing
+#### 4. Docker (optional)
+```bash
+cd queue_backend/springboot_project
+docker compose up
+```
 
-Contributions are welcome! Please fork the repository and submit a pull request for any enhancements or bug fixes.
+---
 
-## License
+## 📌 API Highlights
 
-This project is licensed under the [MIT License](LICENSE).
+- `POST /auth/register` – Register new user/admin
+- `POST /auth/authenticate` – Authenticate and receive JWT
+- `GET /queue/all` – Retrieve current queue
+- `POST /queue/join` – Join a queue
+- `DELETE /queue/leave/{id}` – Leave the queue
+- `POST /queue/activate` – Admin action to activate queue
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please fork the repo and submit a pull request.
+
